@@ -2,6 +2,9 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools
 
+# Use the JDK embedded with Android Studio for command-line builds
+export JAVA_HOME='/Applications/Android Studio.app/Contents/jre/jdk/Contents/Home'
+
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 

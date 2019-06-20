@@ -1,1 +1,6 @@
+# Local configurations
 git/gitconfig.local.symlink
+
+# macOS
+.DS_Store
+

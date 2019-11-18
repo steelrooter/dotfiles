@@ -15,6 +15,7 @@ fi
 # Checkout master
 git checkout master || exit 1
 
+pull_from_remote=upstream
 # Check if upstream remote is defined
 if git remote get-url upstream > /dev/null 2>&1; then
 	# Pull upstream master
@@ -23,6 +24,7 @@ if git remote get-url upstream > /dev/null 2>&1; then
 elif git remote get-url origin > /dev/null 2>&1; then
 	# Pull origin master
 	git pull origin master || exit 1
+	pull_from_remote=origin
 else
 	echo "both upstream and origin remotes undefined";
 	exit 1
@@ -31,5 +33,7 @@ fi
 # Fetch all changes
 git fetch --all --prune || exit 1
 
-# Push master to origin
-git push origin master || exit 1
+# Push master to origin (if pulled from upstream)
+if [ "$pull_from_remote" = upstream ]; then
+	git push origin master || exit 1
+fi

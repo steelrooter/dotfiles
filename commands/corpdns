@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+CMD=$1;
+
+if [[ `id -u` = 0 ]]; then
+    echo "You mustn't be root when executing this script";
+    exit;
+fi
+
+function usage {
+    echo "Usage: $(basename $0) COMMAND
+
+  COMMANDS:
+
+    stop    Run sudo launchctl unload /Library/LaunchDaemons/com.cisco.anyconnect.vpnagentd.plist
+    start   Run sudo launchctl load /Library/LaunchDaemons/com.cisco.anyconnect.vpnagentd.plist
+    restart Stop corporate DNS, then start again.
+    status  Is corporate DNS running?
+    ps      Show corporate DNS process, if running.
+";
+    exit 1;
+}
+function start () {
+    sudo launchctl load /Library/LaunchDaemons/com.cisco.anyconnect.vpnagentd.plist;
+    sleep 1;
+    status;
+}
+function stop () {
+    sudo launchctl unload /Library/LaunchDaemons/com.cisco.anyconnect.vpnagentd.plist;
+    sleep 1;
+    status;
+}
+function status () {
+    ps auwwx | egrep "dnscrypt|RoamingClientMenubar|dns-updater" | grep -vq egrep;
+    if [[ 0 == $? ]]; then
+        echo "Umbrella is running. Checking debug.opendns.com DNS…";
+        dig debug.opendns.com txt +time=2 +tries=1 +short | sed 's/^"/  "/' | grep '"';
+        [[ 1 == $? ]] && echo "Umbrella is not functioning correctly!"
+    else
+        echo "Umbrella is stopped";
+        grep -q 127.0.0.1 /etc/resolv.conf && echo "Without umbrella running, you'll need to remove 127.0.0.1 from your DNS servers before you can resolve domains.";
+    fi
+    echo "Currently using name servers: $(cat /etc/resolv.conf | grep nameserver | sed 's/nameserver //' | tr '\n' ' ')"
+}
+function display_process () {
+    ps auwwx | egrep "dnscrypt|RoamingClientMenubar|dns-updater" | grep -v egrep;
+}
+
+case $CMD in
+    (start) start;;
+    (stop) stop;;
+    (restart) stop && start;;
+    (status) status;;
+    (ps) display_process;;
+    (*) usage;;
+esac
+
+exit 0;

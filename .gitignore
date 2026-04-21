@@ -4,3 +4,5 @@ git/gitconfig.local.symlink
 # macOS
 .DS_Store
 
+# IntelliJ IDEA
+.idea

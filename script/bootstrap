@@ -137,8 +137,14 @@ install_dotfiles () {
   done
 }
 
+post_install_actions() {
+  # Create this directory to ensure ZSH history gets saved
+  mkdir -p "$HOME/.config/zsh"
+}
+
 setup_gitconfig
 install_dotfiles
+post_install_actions
 
 echo ''
 echo '  All installed!'

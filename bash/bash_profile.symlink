@@ -1,2 +1,1 @@
-export PATH=${PATH}:/Users/sachin.tewari/Library/Android/sdk/platform-tools
-
+# This file shouldn't be used unless required for a very specific reason

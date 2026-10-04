@@ -1,14 +1,18 @@
 # Sachin's dotfiles
 
 A small start to maintain my computing environment preferences.
-Inspired from [Holman's dotfiles](https://github.com/holman/dotfiles)
+Inspired from [Holman's dotfiles](https://github.com/holman/dotfiles).
 
 ## install
 
-Run this:
+Clone the repo:
 
 ```sh
 git clone https://github.com/steelrooter/dotfiles.git ~/.dotfiles
+```
+
+Then:
+```sh
 cd ~/.dotfiles
 script/bootstrap
 ```
